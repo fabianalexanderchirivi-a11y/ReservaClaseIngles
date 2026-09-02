@@ -18,7 +18,7 @@ export const spacing = {
 }
 
 export const typography ={
-    titulo: {fontSize: 26, fontWeight: '800', color: colors.texto},
+    titulo: {fontSize: 20, fontWeight: '700', color: colors.texto},
     subtitulo: {fontSize: 18, fontWeight: '600', color: colors.texto}
 }
 
