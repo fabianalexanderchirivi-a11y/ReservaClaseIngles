@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, Text, TextInput, FlatList, ScrollView, StyleSheet } from 'react-native'
+import React, { useState, useMemo } from 'react'
+import { View, Text, TextInput, FlatList, ScrollView, StyleSheet, FlatList } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Ionicons } from '@expo/vector-icons'
@@ -7,13 +7,28 @@ import { Ionicons } from '@expo/vector-icons'
 import useResponsive from '../hooks/useResponsive'
 import Card from '../components/Card'
 import NivelFiltro from '../components/NivelFiltro'
+import EstadoVacio from '../components/EstadoVacio'
 import { spacing, colors, typography, radius } from '../theme'
-import { CLASES, NIVELES } from '../data/clases'
+import { CLASES, NIVELES } from '../data/clases';
+
 
 export default function ClassesScreen({ navigation }) {
   const insets = useSafeAreaInsets()
+  const { columnas, paddingHorizontal}=useResponsive();
   const [nivel, setNivel] = useState('Todos')
   const [busqueda, setBusqueda] = useState('')
+
+  const resultados = useMemo(()=>{
+    const textoBusqueda = busqueda.trim().toLowerCase();
+    return CLASES.filter((clase)=>{
+      const coincideNivel=nivel === 'Todos' || clase.nivel === nivel;
+      const coincideTextoBusqueda= textoBusqueda === ' ' ||
+      clase.titulo.toLowerCase().includes(textoBusqueda) ||
+      clase.profesor.nombre.toLowerCase().includes(textoBusqueda);
+      return coincideNivel && coincideTextoBusqueda
+
+    });
+  },[nivel, busqueda])
 
   
   return (
@@ -54,10 +69,34 @@ export default function ClassesScreen({ navigation }) {
       </View>
 
       <FlatList
-        data={clasesFiltradas}
-        keyExtractor={(item) => item.id?.toString() ?? item.profesor}
-        renderItem={({ item }) => <Card clase={item} />}
-        contentContainerStyle={{ padding: spacing.md }}
+        data={resultados}
+        keyExtractor={(item) => item}
+        renderItem={({ item }) => ( 
+          <Card 
+            clase={item}
+            onPress={() => navigation.navigate('DetalleCLase', {clase: item})}
+          />
+        )}
+        numColumns={columnas}
+        showsVerticalScrollIndicator = {false}
+        contentContainerStyle={{ paddingHorizontal,
+          flexGrow:1,
+          paddingBottom: spacing.xl
+
+         }}
+        ListEmptyComponent={
+            <EstadoVacio
+                icono="search-outline"
+                titulo="No encontramos valores de busqueda"
+                mensaje="Prueba con oto valor de busqueda"
+                textoAccion="Quitar filtros"
+                onAction={()=>{
+                  setNivel('Todos')
+                  setBusqueda('')
+                }}
+            />
+          
+        }
       />
     </View>
   )
