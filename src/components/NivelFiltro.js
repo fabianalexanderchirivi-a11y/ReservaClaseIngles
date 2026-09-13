@@ -21,13 +21,13 @@ export default function NivelFiltro({etiqueta, activo, onPress}) {
 
 const styles = StyleSheet.create({
   chip: {
-    paddingVertical: spacing.sn,
+    paddingVertical: spacing.sm,
     paddingHorizontal: spacing.lg,
     borderRadius: 999,
     backgroundColor: colors.superficie,
     borderWidth: 1,
     borderColor: colors.borde,
-    marginRight: spacing.sn,
+    marginRight: spacing.sm,
   },
   chipActivo: {
     backgroundColor: colors.primario,

@@ -4,8 +4,10 @@ export const colors = {
     fondo: '#FFF7ED',
     superficie: '#FFFFFF',
     primario: '#C86B12',
+    primarioSuave: '#F5D6B0',
     texto: '#2F241F',
     textoSecundario: '#6B5B53',
+    textoSuave: '#6B5B53',
     borde: '#E7A45E'
 }
 
@@ -26,7 +28,8 @@ export const radius = {
 
 export const typography = {
     titulo: {fontSize: 20, fontWeight: '700', color: colors.texto},
-    subtitulo: {fontSize: 18, fontWeight: '600', color: colors.texto}
+    subtitulo: {fontSize: 18, fontWeight: '600', color: colors.texto},
+    cuerpo: {fontSize: 14, fontWeight: '400', color: colors.texto}
 }
 
 export default {colors, spacing, radius, typography}

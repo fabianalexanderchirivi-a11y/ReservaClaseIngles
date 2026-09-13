@@ -3,7 +3,7 @@ import { View, Text, ScrollView, StyleSheet, Alert, Image } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import useResponsive from "../hooks/useResponsive";
-import { colors, spacing, sombra, typography, radius } from "../theme";
+import { colors, spacing, typography, radius } from "../theme";
 import { formatearPrecio } from "../data/clases";
 
 export default function DetalleClaseScreen({ route, navigation }) {

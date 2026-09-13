@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     marginTop: spacing.xs,
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sn,
+    paddingVertical: spacing.sm,
     backgroundColor: colors.primario,
     borderRadius: 10,
     borderCurve: 'continuous',
