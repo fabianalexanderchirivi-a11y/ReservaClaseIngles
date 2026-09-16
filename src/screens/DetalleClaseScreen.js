@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useLayoutEffect } from "react";
-import { View, Text, ScrollView, StyleSheet, Alert, Image } from "react-native";
+import React, { useState, useLayoutEffect } from "react";
+import { View, Text, ScrollView, StyleSheet, Image, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import useResponsive from "../hooks/useResponsive";
@@ -10,9 +10,20 @@ export default function DetalleClaseScreen({ route, navigation }) {
   const insets = useSafeAreaInsets();
   const { clase } = route.params;
   const { isTable } = useResponsive();
+  const [horarioSeleccionado, setHorarioSeleccionado] = useState(
+    clase.horarios?.[0] ?? null
+  );
+
   useLayoutEffect(() => {
-  navigation.setOptions({ title: clase.titulo });
+    navigation.setOptions({ title: clase.titulo });
   }, [navigation, clase.titulo]);
+
+  const confirmarReserva = () => {
+    if (clase.cupos > 0) {
+      clase.cupos = clase.cupos - 1;
+    }
+    navigation.navigate("Reserva", { clase, horario: horarioSeleccionado });
+  };
 
   return (
     <View style={styles.pantalla}>
@@ -25,7 +36,71 @@ export default function DetalleClaseScreen({ route, navigation }) {
           style={[styles.portada, { height: isTable ? 300 : 200 }]}
           resizeMode="cover"
         />
+
+        <View style={{ padding: spacing.lg }}>
+          <Text style={typography.titulo}>{clase.titulo}</Text>
+          <Text style={styles.descripcion}>{clase.descripcion}</Text>
+
+          <View style={styles.datos}>
+            <View style={styles.dato}>
+              <Ionicons name="cash-outline" size={20} color={colors.primario} />
+              <Text style={styles.datoValor}>{formatearPrecio(clase.precio)}</Text>
+            </View>
+            <View style={styles.dato}>
+              <Ionicons name="time-outline" size={20} color={colors.primario} />
+              <Text style={styles.datoValor}>{clase.duracion} min</Text>
+            </View>
+            <View style={styles.dato}>
+              <Ionicons name="people-outline" size={20} color={colors.primario} />
+              <Text style={styles.datoValor}>{clase.cupos} cupos</Text>
+            </View>
+            <View style={styles.dato}>
+              <Ionicons name="calendar-outline" size={20} color={colors.primario} />
+              <Text style={styles.datoValor}>
+                {horarioSeleccionado ?? "Por confirmar"}
+              </Text>
+            </View>
+          </View>
+
+          <Text style={styles.subtituloHorario}>Elige un horario</Text>
+          <View style={styles.listaHorarios}>
+            {clase.horarios?.map((h) => (
+              <Pressable
+                key={h}
+                onPress={() => setHorarioSeleccionado(h)}
+                style={[
+                  styles.chipHorario,
+                  horarioSeleccionado === h && styles.chipHorarioActivo,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.textoHorario,
+                    horarioSeleccionado === h && styles.textoHorarioActivo,
+                  ]}
+                >
+                  {h}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+
+          <View style={styles.profesor}>
+            <Image source={{ uri: clase.profesor.foto }} style={styles.avatar} />
+            <View>
+              <Text style={styles.profesorNombre}>{clase.profesor.nombre}</Text>
+              <Text style={styles.descripcion}>{clase.profesor.pais}</Text>
+            </View>
+          </View>
+        </View>
       </ScrollView>
+
+      <View style={[styles.barra, { paddingBottom: insets.bottom + spacing.lg }]}>
+        <Text style={styles.precio}>{formatearPrecio(clase.precio)}</Text>
+        <Pressable style={styles.boton} onPress={confirmarReserva}>
+          <Text style={styles.textoBoton}>Realizar reserva</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -35,13 +110,48 @@ const styles = StyleSheet.create({
   portada: { width: '100%', backgroundColor: colors.primarioSuave },
   datos: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     backgroundColor: colors.superficie,
     borderRadius: radius.lg,
     paddingVertical: spacing.lg,
+    paddingHorizontal: spacing.md,
+    marginTop: spacing.lg,
   },
-  dato: { alignItems: 'center', gap: 2 },
-  datoValor: { fontSize: 16, fontWeight: '800', color: colors.texto },
+  dato: { width: '48%', alignItems: 'center', gap: 4, marginBottom: spacing.sm },
+  datoValor: { fontSize: 14, fontWeight: '800', color: colors.texto },
+  subtituloHorario: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: colors.texto,
+    marginTop: spacing.lg,
+    marginBottom: spacing.sm,
+  },
+  listaHorarios: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+  },
+  chipHorario: {
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.md,
+    backgroundColor: colors.superficie,
+    borderWidth: 1,
+    borderColor: colors.borde,
+  },
+  chipHorarioActivo: {
+    backgroundColor: colors.primario,
+    borderColor: colors.primario,
+  },
+  textoHorario: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.textoSecundario,
+  },
+  textoHorarioActivo: {
+    color: colors.superficie,
+  },
   profesor: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -49,6 +159,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.superficie,
     borderRadius: radius.lg,
     padding: spacing.lg,
+    marginTop: spacing.lg,
   },
   avatar: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.borde },
   profesorNombre: { fontSize: 15, fontWeight: '700', color: colors.texto },
@@ -60,11 +171,23 @@ const styles = StyleSheet.create({
     bottom: 0,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: colors.superficie,
     borderTopWidth: 1,
     borderTopColor: colors.borde,
     paddingVertical: spacing.lg,
-    paddingTop: spacing.lg
+    paddingHorizontal: spacing.lg,
   },
   precio: { fontSize: 18, fontWeight: '800', color: colors.primario },
+  boton: {
+    backgroundColor: colors.primario,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    borderRadius: radius.md,
+  },
+  textoBoton: {
+    color: colors.superficie,
+    fontSize: 14,
+    fontWeight: '700',
+  },
 });
