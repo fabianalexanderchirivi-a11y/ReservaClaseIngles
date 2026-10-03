@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from "react";
-import { View, Text, ScrollView, StyleSheet, Image, Pressable } from "react-native";
+import { View, Text, ScrollView, StyleSheet, Image, Pressable, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import useResponsive from "../hooks/useResponsive";
@@ -19,10 +19,16 @@ export default function DetalleClaseScreen({ route, navigation }) {
   }, [navigation, clase.titulo]);
 
   const confirmarReserva = () => {
-    if (clase.cupos > 0) {
-      clase.cupos = clase.cupos - 1;
+    if (clase.cupos <= 0) {
+      Alert.alert("Sin cupos", "Ya no quedan cupos disponibles para esta clase.");
+      return;
     }
-    navigation.navigate("Reserva", { clase, horario: horarioSeleccionado });
+
+    clase.cupos = clase.cupos - 1;
+    Alert.alert(
+      "Reserva confirmada",
+      `Reservaste "${clase.titulo}" para el horario ${horarioSeleccionado}.`
+    );
   };
 
   return (
