@@ -2,7 +2,7 @@ import {DefaultTheme, NavigationContainer} from '@react-navigation/native'
 import {StatusBar} from 'expo-status-bar'
 import {SafeAreaProvider} from 'react-native-safe-area-context'
 
-import ClasesStack from './src/navigation/ClasesStack'
+import TabPrincipal from './src/navigation/TabPrincipal'
 import {colors} from './src/theme'
 
 const temaNavegacion = {
@@ -22,7 +22,7 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer theme={temaNavegacion}>
         <StatusBar style="dark" />
-        <ClasesStack />
+        <TabPrincipal />
       </NavigationContainer>
     </SafeAreaProvider>
   )

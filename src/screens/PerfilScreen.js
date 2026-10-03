@@ -2,10 +2,10 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { colors, typography } from "../theme";
 
-export default function ReservaScreen({ navigation }) {
+export default function PerfilScreen() {
   return (
     <View style={styles.pantalla}>
-      <Text style={typography.titulo}>Mis reservas</Text>
+      <Text style={typography.titulo}>Mi perfil</Text>
     </View>
   );
 }
