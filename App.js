@@ -3,6 +3,7 @@ import {StatusBar} from 'expo-status-bar'
 import {SafeAreaProvider} from 'react-native-safe-area-context'
 
 import TabPrincipal from './src/navigation/TabPrincipal'
+import { ReservaProvider } from './src/context/ReservaContext'
 import {colors} from './src/theme'
 
 const temaNavegacion = {
@@ -20,10 +21,12 @@ const temaNavegacion = {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <NavigationContainer theme={temaNavegacion}>
-        <StatusBar style="dark" />
-        <TabPrincipal />
-      </NavigationContainer>
+      <ReservaProvider>
+        <NavigationContainer theme={temaNavegacion}>
+          <StatusBar style="dark" />
+          <TabPrincipal />
+        </NavigationContainer>
+      </ReservaProvider>
     </SafeAreaProvider>
   )
 }

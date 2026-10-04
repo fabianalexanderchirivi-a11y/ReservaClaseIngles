@@ -1,26 +1,32 @@
 import React, { useState } from 'react'
 import { View, Text, Pressable, StyleSheet } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 
 import ClasesStack from './ClasesStack'
-import ReservaScreen from '../screens/ReservaScreen'
+import ReservasScreen from '../screens/ReservasScreen'
 import PerfilScreen from '../screens/PerfilScreen'
 import { colors, spacing } from '../theme'
 
 export default function TabPrincipal() {
   const [tabActiva, setTabActiva] = useState('inicio')
+  const [homeKey, setHomeKey] = useState(0)
 
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
-        {tabActiva === 'inicio' && <ClasesStack />}
-        {tabActiva === 'reservas' && <ReservaScreen />}
+        {tabActiva === 'inicio' && <ClasesStack key={homeKey} />}
+        {tabActiva === 'reservas' && <ReservasScreen />}
         {tabActiva === 'perfil' && <PerfilScreen />}
       </View>
 
       <View style={styles.barra}>
-        <Pressable style={styles.item} onPress={() => setTabActiva('inicio')}>
+        <Pressable
+          style={styles.item}
+          onPress={() => {
+            setTabActiva('inicio')
+            setHomeKey((k) => k + 1)
+          }}
+        >
           <Ionicons
             name="home-outline"
             size={24}
@@ -78,4 +84,5 @@ const styles = StyleSheet.create({
     color: colors.primario,
     fontWeight: '700',
   },
-})
+
+})  
