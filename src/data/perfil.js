@@ -6,8 +6,7 @@ export const PERFIL_VACIO = {
   foto: '',
 }
 
-export const FOTO_POR_DEFECTO = require('../../assets/icon.png')
-
+export const FOTO_POR_DEFECTO = require('../../assets/perfil.png')
 export function tienePerfilCreado(perfil) {
   return perfil !== null && perfil.nombre.trim() !== ''
 }

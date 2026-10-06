@@ -6,9 +6,19 @@ export const ReservaContext = createContext(null)
 export function ReservaProvider({ children }) {
   const { valor: perfil, setValor: setPerfil } = useAlmacenamiento('perfil', null)
   const { valor: reservas, setValor: setReservas } = useAlmacenamiento('reservas', [])
+  const { valor: sesionIniciada, setValor: setSesionIniciada } = useAlmacenamiento('sesionIniciada', false)
 
   const guardarPerfil = (datos) => {
     setPerfil(datos)
+    setSesionIniciada(true)
+  }
+
+  const iniciarSesion = () => {
+    setSesionIniciada(true)
+  }
+
+  const cerrarSesion = () => {
+    setSesionIniciada(false)
   }
 
   const agregarReserva = (reserva) => {
@@ -26,6 +36,9 @@ export function ReservaProvider({ children }) {
   const valorContexto = {
     perfil,
     guardarPerfil,
+    sesionIniciada,
+    iniciarSesion,
+    cerrarSesion,
     reservas,
     agregarReserva,
     cancelarReserva,

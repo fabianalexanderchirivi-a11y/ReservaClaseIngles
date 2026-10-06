@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, Image, Pressable, Alert } from "rea
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import useResponsive from "../hooks/useResponsive";
+import useReserva from "../hooks/useReserva";
 import { colors, spacing, typography, radius } from "../theme";
 import { formatearPrecio } from "../data/clases";
 
@@ -10,21 +11,48 @@ export default function DetalleClaseScreen({ route, navigation }) {
   const insets = useSafeAreaInsets();
   const { clase } = route.params;
   const { isTable } = useResponsive();
+  const { sesionIniciada, horarioOcupado, agregarReserva } = useReserva();
   const [horarioSeleccionado, setHorarioSeleccionado] = useState(
     clase.horarios?.[0] ?? null
   );
+  const [, forzarRender] = useState(0);
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: clase.titulo });
   }, [navigation, clase.titulo]);
 
   const confirmarReserva = () => {
+    if (!sesionIniciada) {
+      Alert.alert(
+        "Inicia sesión primero",
+        "Debes iniciar sesión o registrarte en la pestaña Perfil antes de reservar."
+      );
+      return;
+    }
+
     if (clase.cupos <= 0) {
       Alert.alert("Sin cupos", "Ya no quedan cupos disponibles para esta clase.");
       return;
     }
 
+    if (horarioOcupado(horarioSeleccionado)) {
+      Alert.alert(
+        "Horario ocupado",
+        "Ya tienes una reserva en ese horario. Elige otro para esta clase."
+      );
+      return;
+    }
+
     clase.cupos = clase.cupos - 1;
+    forzarRender((n) => n + 1);
+
+    agregarReserva({
+      id: `${clase.id}-${horarioSeleccionado}-${Date.now()}`,
+      claseId: clase.id,
+      claseTitulo: clase.titulo,
+      horario: horarioSeleccionado,
+    });
+
     Alert.alert(
       "Reserva confirmada",
       `Reservaste "${clase.titulo}" para el horario ${horarioSeleccionado}.`
