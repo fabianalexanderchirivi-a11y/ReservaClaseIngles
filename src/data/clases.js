@@ -171,3 +171,6 @@ export const CLASES = [
 
 export const formatearPrecio = (valor) =>
   "$" + valor.toLocaleString("es-CO") + " COP";
+
+export const cuposDisponibles = (clase, reservas) =>
+  clase.cupos - reservas.filter((r) => r.claseId === clase.id).length;

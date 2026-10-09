@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 
 import ClasesStack from './ClasesStack'
@@ -8,6 +9,7 @@ import PerfilScreen from '../screens/PerfilScreen'
 import { colors, spacing } from '../theme'
 
 export default function TabPrincipal() {
+  const insets = useSafeAreaInsets()
   const [tabActiva, setTabActiva] = useState('inicio')
   const [homeKey, setHomeKey] = useState(0)
 
@@ -19,7 +21,7 @@ export default function TabPrincipal() {
         {tabActiva === 'perfil' && <PerfilScreen />}
       </View>
 
-      <View style={styles.barra}>
+      <View style={[styles.barra, { paddingBottom: insets.bottom + spacing.sm }]}>
         <Pressable
           style={styles.item}
           onPress={() => {
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.borde,
     backgroundColor: colors.superficie,
-    paddingVertical: spacing.sm,
+    paddingTop: spacing.sm,
   },
   item: {
     flex: 1,
@@ -84,5 +86,4 @@ const styles = StyleSheet.create({
     color: colors.primario,
     fontWeight: '700',
   },
-
-})  
+})

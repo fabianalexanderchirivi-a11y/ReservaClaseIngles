@@ -5,17 +5,18 @@ import { Ionicons } from "@expo/vector-icons";
 import useResponsive from "../hooks/useResponsive";
 import useReserva from "../hooks/useReserva";
 import { colors, spacing, typography, radius } from "../theme";
-import { formatearPrecio } from "../data/clases";
+import { formatearPrecio, cuposDisponibles } from "../data/clases";
 
 export default function DetalleClaseScreen({ route, navigation }) {
   const insets = useSafeAreaInsets();
   const { clase } = route.params;
   const { isTable } = useResponsive();
-  const { sesionIniciada, horarioOcupado, agregarReserva } = useReserva();
+  const { sesionIniciada, reservas, horarioOcupado, agregarReserva } = useReserva();
   const [horarioSeleccionado, setHorarioSeleccionado] = useState(
     clase.horarios?.[0] ?? null
   );
-  const [, forzarRender] = useState(0);
+
+  const disponibles = cuposDisponibles(clase, reservas);
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: clase.titulo });
@@ -30,7 +31,7 @@ export default function DetalleClaseScreen({ route, navigation }) {
       return;
     }
 
-    if (clase.cupos <= 0) {
+    if (disponibles <= 0) {
       Alert.alert("Sin cupos", "Ya no quedan cupos disponibles para esta clase.");
       return;
     }
@@ -38,13 +39,10 @@ export default function DetalleClaseScreen({ route, navigation }) {
     if (horarioOcupado(horarioSeleccionado)) {
       Alert.alert(
         "Horario ocupado",
-        "Ya tienes una reserva en ese horario. Elige otro para esta clase."
+        "Ya tienes una reserva en ese horario. Elige otro."
       );
       return;
     }
-
-    clase.cupos = clase.cupos - 1;
-    forzarRender((n) => n + 1);
 
     agregarReserva({
       id: `${clase.id}-${horarioSeleccionado}-${Date.now()}`,
@@ -86,7 +84,7 @@ export default function DetalleClaseScreen({ route, navigation }) {
             </View>
             <View style={styles.dato}>
               <Ionicons name="people-outline" size={20} color={colors.primario} />
-              <Text style={styles.datoValor}>{clase.cupos} cupos</Text>
+              <Text style={styles.datoValor}>{disponibles} cupos</Text>
             </View>
             <View style={styles.dato}>
               <Ionicons name="calendar-outline" size={20} color={colors.primario} />
@@ -131,8 +129,14 @@ export default function DetalleClaseScreen({ route, navigation }) {
 
       <View style={[styles.barra, { paddingBottom: insets.bottom + spacing.lg }]}>
         <Text style={styles.precio}>{formatearPrecio(clase.precio)}</Text>
-        <Pressable style={styles.boton} onPress={confirmarReserva}>
-          <Text style={styles.textoBoton}>Realizar reserva</Text>
+        <Pressable
+          style={[styles.boton, disponibles <= 0 && styles.botonDeshabilitado]}
+          onPress={confirmarReserva}
+          disabled={disponibles <= 0}
+        >
+          <Text style={styles.textoBoton}>
+            {disponibles <= 0 ? "Sin cupos" : "Realizar reserva"}
+          </Text>
         </Pressable>
       </View>
     </View>
@@ -218,6 +222,9 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     borderRadius: radius.md,
+  },
+  botonDeshabilitado: {
+    backgroundColor: colors.borde,
   },
   textoBoton: {
     color: colors.superficie,

@@ -1,11 +1,21 @@
 import React from "react";
 import { View, Text, FlatList, Pressable, StyleSheet, Alert } from "react-native";
 import useReserva from "../hooks/useReserva";
-import { CLASES } from "../data/clases";
 import { colors, spacing, radius, typography } from "../theme";
 
 export default function ReservasScreen() {
-  const { reservas, cancelarReserva } = useReserva();
+  const { reservas, cancelarReserva, cancelarTodas, sesionIniciada } = useReserva();
+
+  if (!sesionIniciada) {
+    return (
+      <View style={styles.pantallaVacia}>
+        <Text style={typography.titulo}>Sesión cerrada</Text>
+        <Text style={styles.sinReservas}>
+          Inicia sesión en la pestaña Perfil para ver tus reservas
+        </Text>
+      </View>
+    );
+  }
 
   const confirmarCancelacion = (reserva) => {
     Alert.alert(
@@ -17,11 +27,24 @@ export default function ReservasScreen() {
           text: "Sí, cancelar",
           style: "destructive",
           onPress: () => {
-            const clase = CLASES.find((c) => c.id === reserva.claseId);
-            if (clase) {
-              clase.cupos = clase.cupos + 1;
-            }
             cancelarReserva(reserva.id);
+          },
+        },
+      ]
+    );
+  };
+
+  const confirmarCancelarTodas = () => {
+    Alert.alert(
+      "Cancelar todas",
+      "¿Seguro que quieres cancelar todas tus reservas?",
+      [
+        { text: "No", style: "cancel" },
+        {
+          text: "Sí, cancelar todas",
+          style: "destructive",
+          onPress: () => {
+            cancelarTodas();
           },
         },
       ]
@@ -51,19 +74,34 @@ export default function ReservasScreen() {
           <Text style={styles.sinReservas}>Todavía no tienes reservas</Text>
         }
       />
+
+      {reservas.length > 0 && (
+        <View style={styles.pie}>
+          <Pressable style={styles.botonCancelarTodas} onPress={confirmarCancelarTodas}>
+            <Text style={styles.textoCancelarTodas}>Cancelar todas las reservas</Text>
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   pantalla: { flex: 1, backgroundColor: colors.fondo },
+  pantallaVacia: {
+    flex: 1,
+    backgroundColor: colors.fondo,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: spacing.xl,
+  },
   tarjeta: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: colors.superficie,
     borderRadius: radius.lg,
     padding: spacing.lg,
-    marginBottom: spacing.md,
+    marginBottom: spacing.lg,
   },
   claseTitulo: { fontSize: 15, fontWeight: "700", color: colors.texto },
   horario: { fontSize: 13, color: colors.textoSecundario, marginTop: 2 },
@@ -78,6 +116,20 @@ const styles = StyleSheet.create({
   sinReservas: {
     textAlign: "center",
     color: colors.textoSecundario,
-    marginTop: spacing.xl,
+    marginTop: spacing.sm,
   },
+  pie: {
+    padding: spacing.lg,
+    borderTopWidth: 1,
+    borderTopColor: colors.borde,
+    backgroundColor: colors.superficie,
+  },
+  botonCancelarTodas: {
+    paddingVertical: spacing.md,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.primario,
+    alignItems: "center",
+  },
+  textoCancelarTodas: { color: colors.primario, fontSize: 14, fontWeight: "700" },
 });

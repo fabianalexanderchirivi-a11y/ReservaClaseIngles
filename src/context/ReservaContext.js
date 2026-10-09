@@ -29,6 +29,10 @@ export function ReservaProvider({ children }) {
     setReservas((anteriores) => anteriores.filter((r) => r.id !== idReserva))
   }
 
+  const cancelarTodas = () => {
+    setReservas([])
+  }
+
   const horarioOcupado = (horario) => {
     return reservas.some((r) => r.horario === horario)
   }
@@ -42,6 +46,7 @@ export function ReservaProvider({ children }) {
     reservas,
     agregarReserva,
     cancelarReserva,
+    cancelarTodas,
     horarioOcupado,
   }
 

@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     borderCurve: 'continuous',
+    marginBottom: spacing.lg,
   },
   fotoProfesor: {
     width: 92,
