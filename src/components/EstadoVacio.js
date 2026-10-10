@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors, spacing } from "../theme";
 
-export default function EstadoVacio({ icono = 'search-outline', titulo, mensaje, textoAccion, onAction }) {
+export default function EstadoVacio({ icono= 'search-outline', titulo, mensaje, textoAccion, onAction }) {
   return (
     <View style={styles.contenedor}>
       <View style={styles.circulo}>
@@ -23,8 +23,8 @@ export default function EstadoVacio({ icono = 'search-outline', titulo, mensaje,
 
 const styles = StyleSheet.create({
   contenedor: {
-    flex: 1,
-    alignItems: 'center',
+    flex:1,
+    alignItems:'center',
     justifyContent: 'center',
     padding: spacing.xl,
   },

@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import DetalleClaseScreen from "../screens/DetalleClaseScreen"
 import ClassesScreen from '../screens/ClassesScreen'
 
-const Stack = createNativeStackNavigator()
+const Stack= createNativeStackNavigator()
 
 export default function ClasesStack() {
   return (

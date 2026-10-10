@@ -5,7 +5,7 @@ import {colors, spacing} from '../theme'
 import EtiquetaNivel from './EtiquetaNivel'
 
 export default function Card({clase, onReservar}) {
-  const primerHorario = clase.horarios?.[0] ?? 'Horario por confirmar'
+  const primerHorario= clase.horarios?.[0] ?? 'Horario por confirmar'
 
   return (
     <View style={styles.tarjeta}>
@@ -19,7 +19,7 @@ export default function Card({clase, onReservar}) {
         <EtiquetaNivel nivel={clase.nivel} />
         <Text style={styles.titulo}>{clase.titulo}</Text>
         <Text style={styles.profesor}>{clase.profesor.nombre}</Text>
-        <Text style={styles.descripcion} numberOfLines={2}>
+        <Text style={styles.descripcion}numberOfLines={2}>
           {clase.descripcion}
         </Text>
         <Text style={styles.horario}>{primerHorario}</Text>
@@ -46,12 +46,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
-    padding: spacing.lg,
+    padding:spacing.lg,
     backgroundColor: colors.superficie,
     borderColor: colors.borde,
-    borderWidth: 1,
-    borderRadius: 20,
-    borderCurve: 'continuous',
+    borderWidth:1,
+    borderRadius:20,
+    borderCurve:'continuous',
     marginBottom: spacing.lg,
   },
   fotoProfesor: {

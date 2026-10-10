@@ -8,11 +8,11 @@ export default function RegistrarScreen({ onGuardado, onCancelar, perfilInicial 
   const { guardarPerfil } = useReserva();
   const modoEdicion = !!perfilInicial;
 
-  const [nombre, setNombre] = useState(perfilInicial?.nombre ?? PERFIL_VACIO.nombre);
-  const [apellido, setApellido] = useState(perfilInicial?.apellido ?? PERFIL_VACIO.apellido);
-  const [telefono, setTelefono] = useState(perfilInicial?.telefono ?? PERFIL_VACIO.telefono);
-  const [email, setEmail] = useState(perfilInicial?.email ?? PERFIL_VACIO.email);
-  const [foto, setFoto] = useState(perfilInicial?.foto ?? PERFIL_VACIO.foto);
+  const [nombre, setNombre]= useState(perfilInicial?.nombre ?? PERFIL_VACIO.nombre);
+  const [apellido, setApellido]= useState(perfilInicial?.apellido ?? PERFIL_VACIO.apellido);
+  const [telefono, setTelefono]= useState(perfilInicial?.telefono ?? PERFIL_VACIO.telefono);
+  const [email, setEmail]= useState(perfilInicial?.email ?? PERFIL_VACIO.email);
+  const [foto, setFoto]= useState(perfilInicial?.foto ?? PERFIL_VACIO.foto);
 
   const confirmar = () => {
     if (nombre.trim() === "" || apellido.trim() === "") {

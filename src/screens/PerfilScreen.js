@@ -22,8 +22,6 @@ export default function PerfilScreen() {
       />
     );
   }
-
-  // Caso 1: nunca se ha creado un perfil
   if (!tienePerfilCreado(perfil)) {
     return (
       <View style={styles.pantallaVacia}>
@@ -36,7 +34,6 @@ export default function PerfilScreen() {
     );
   }
 
-  // Caso 2: ya existe un perfil, pero la sesión está cerrada
   if (!sesionIniciada) {
     return (
       <View style={styles.pantallaVacia}>
@@ -49,8 +46,6 @@ export default function PerfilScreen() {
       </View>
     );
   }
-
-  // Caso 3: sesión iniciada, mostrar perfil completo
   return (
     <View style={styles.pantalla}>
       <View style={styles.tarjeta}>

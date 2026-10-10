@@ -4,9 +4,9 @@ import useAlmacenamiento from '../hooks/useAlmacenamiento'
 export const ReservaContext = createContext(null)
 
 export function ReservaProvider({ children }) {
-  const { valor: perfil, setValor: setPerfil } = useAlmacenamiento('perfil', null)
-  const { valor: reservas, setValor: setReservas } = useAlmacenamiento('reservas', [])
-  const { valor: sesionIniciada, setValor: setSesionIniciada } = useAlmacenamiento('sesionIniciada', false)
+  const {valor: perfil, setValor: setPerfil } = useAlmacenamiento('perfil', null)
+  const {valor: reservas, setValor: setReservas } = useAlmacenamiento('reservas', [])
+  const {valor: sesionIniciada, setValor: setSesionIniciada } = useAlmacenamiento('sesionIniciada', false)
 
   const guardarPerfil = (datos) => {
     setPerfil(datos)

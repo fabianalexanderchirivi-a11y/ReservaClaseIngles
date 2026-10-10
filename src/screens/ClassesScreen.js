@@ -11,12 +11,12 @@ import { spacing, colors, typography, radius } from '../theme'
 import { CLASES, NIVELES } from '../data/clases'
 
 export default function ClassesScreen({ navigation }) {
-  const insets = useSafeAreaInsets()
+  const insets= useSafeAreaInsets()
   const { columnas, paddingHorizontal } = useResponsive()
   const [nivel, setNivel] = useState('Todos')
   const [busqueda, setBusqueda] = useState('')
 
-  const resultados = useMemo(() => {
+  const resultados= useMemo(() => {
     const textoBusqueda = busqueda.trim().toLowerCase()
     return CLASES.filter((clase) => {
       const coincideNivel = nivel === 'Todos' || clase.nivel === nivel

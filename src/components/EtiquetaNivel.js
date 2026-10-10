@@ -12,7 +12,7 @@ export default function EtiquetaNivel({nivel}) {
 
 const styles = StyleSheet.create({
   contenedor: {
-    alignSelf: 'flex-start',
+    alignSelf:'flex-start',
     paddingHorizontal: spacing.md,
     paddingVertical: 3,
     backgroundColor: colors.fondo,
